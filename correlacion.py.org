@@ -124,7 +124,7 @@ def calcular_correlacion(df_sub, x_col, y_col, etiqueta):
             "m": np.polyfit(df_sub[x_col], df_sub[y_col], 1)[0],
             "b": np.polyfit(df_sub[x_col], df_sub[y_col], 1)[1]}
 
-res_dia   = calcular_correlacion(df_dia,   "T_exterior",  "T_interior",    "DÍA   — T_exterior (°C)    vs  T_interior (°C)")
+res_dia   = calcular_correlacion(df_dia,   "shortwave_radiation",  "delta_T",    "DÍA   — Radiación (W/m²)  vs  ΔT = T_int − T_ext")
 res_noche = calcular_correlacion(df_noche, "T_exterior", "T_interior", "NOCHE — T_exterior (°C)    vs  T_interior (°C)")
 
 
@@ -151,15 +151,15 @@ ax_ts.legend(lines1 + lines2, labs1 + labs2, loc="upper left", fontsize=8)
 # ── Scatter DÍA ─────────────────────────────────────────────────────────────
 ax_d = fig.add_subplot(gs[1, 0])
 if res_dia:
-    ax_d.scatter(df_dia["T_exterior"], df_dia["T_interior"],
+    ax_d.scatter(df_dia["shortwave_radiation"], df_dia["delta_T"],
                  alpha=0.45, color="orange", edgecolors="darkorange", s=25)
-    x_line = np.linspace(df_dia["T_exterior"].min(), df_dia["T_exterior"].max(), 200)
+    x_line = np.linspace(df_dia["shortwave_radiation"].min(), df_dia["shortwave_radiation"].max(), 200)
     ax_d.plot(x_line, res_dia["m"] * x_line + res_dia["b"], "r--", lw=1.5,
               label=f"r = {res_dia['r']:+.3f}  |  R² = {res_dia['r2']:.3f}")
     ax_d.axhline(0, color="gray", lw=0.8, linestyle=":")
-    ax_d.set_xlabel("T_exterior (°C)")
-    ax_d.set_ylabel("T_interior (°C)")
-    ax_d.set_title("DÍA — T_exterior vs T_interior")
+    ax_d.set_xlabel("Radiación solar (W/m²)")
+    ax_d.set_ylabel("ΔT = T_int − T_ext (°C)")
+    ax_d.set_title("DÍA — Radiación vs ΔT")
     ax_d.legend(fontsize=8)
 
 # ── Scatter NOCHE ────────────────────────────────────────────────────────────
